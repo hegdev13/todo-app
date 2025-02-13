@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: #414141;
+    color: #abecf8;
     margin: 0;
     padding: 20px;
 }
@@ -27,14 +27,16 @@ body {
     border-radius: 4px;
 }
 
-.completed {
-    text-decoration: line-through;
-    opacity: 0.7;
-}
-
 .subtask {
     margin-left: 30px;
     background-color: #404040;
+    padding-left: 20px;
+    border-left: 2px solid #4CAF50;
+}
+
+.completed-subtask {
+    text-decoration: line-through;
+    opacity: 0.7;
 }
 
 button {
@@ -47,7 +49,13 @@ button {
     margin: 5px;
 }
 
-input[type="text"] {
+.delete-btn {
+    background-color: #ff4444;
+    margin-left: auto;
+}
+
+input[type="text"] 
+{
     background-color: #404040;
     color: white;
     border: 1px solid #4CAF50;

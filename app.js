@@ -6,8 +6,10 @@ function saveToLocalStorage() {
 
 function createNewSection() {
     const sectionName = prompt('Enter section name:');
-    if (sectionName) {
-        const newSection = {
+    if (sectionName) 
+        {
+        const newSection = 
+        {
             id: Date.now(),
             name: sectionName,
             tasks: [],
@@ -19,11 +21,14 @@ function createNewSection() {
     }
 }
 
-function addTask(sectionId) {
+function addTask(sectionId) 
+{
     const taskText = prompt('Enter task:');
-    if (taskText) {
+    if (taskText) 
+        {
         const section = todos.find(s => s.id === sectionId);
-        const newTask = {
+        const newTask = 
+        {
             id: Date.now(),
             text: taskText,
             completed: false,
@@ -35,12 +40,15 @@ function addTask(sectionId) {
     }
 }
 
-function addSubtask(taskId, sectionId) {
+function addSubtask(taskId, sectionId) 
+{
     const subtaskText = prompt('Enter subtask:');
-    if (subtaskText) {
+    if (subtaskText) 
+        {
         const section = todos.find(s => s.id === sectionId);
         const task = section.tasks.find(t => t.id === taskId);
-        task.subtasks.push({
+        task.subtasks.push(
+        {
             id: Date.now(),
             text: subtaskText,
             completed: false
@@ -61,8 +69,16 @@ function toggleTask(taskId, sectionId) {
     saveToLocalStorage();
     renderSections();
 }
-
-function editTask(taskId, sectionId) {
+function toggleSubtask(subtaskId, taskId, sectionId) {
+    const section = todos.find(s => s.id === sectionId);
+    const task = section.tasks.find(t => t.id === taskId);
+    const subtask = task.subtasks.find(st => st.id === subtaskId);
+    subtask.completed = !subtask.completed;
+    saveToLocalStorage();
+    renderSections();
+}
+function editTask(taskId, sectionId) 
+{
     const section = todos.find(s => s.id === sectionId);
     const task = section.tasks.find(t => t.id === taskId);
     const newText = prompt('Edit task:', task.text);
@@ -71,6 +87,27 @@ function editTask(taskId, sectionId) {
         saveToLocalStorage();
         renderSections();
     }
+}
+
+function deleteSection(sectionId) {
+    todos = todos.filter(s => s.id !== sectionId);
+    saveToLocalStorage();
+    renderSections();
+}
+
+function deleteTask(taskId, sectionId) {
+    const section = todos.find(s => s.id === sectionId);
+    section.tasks = section.tasks.filter(t => t.id !== taskId);
+    saveToLocalStorage();
+    renderSections();
+}
+
+function deleteSubtask(subtaskId, taskId, sectionId) {
+    const section = todos.find(s => s.id === sectionId);
+    const task = section.tasks.find(t => t.id === taskId);
+    task.subtasks = task.subtasks.filter(st => st.id !== subtaskId);
+    saveToLocalStorage();
+    renderSections();
 }
 
 function renderSections() {
@@ -85,6 +122,7 @@ function renderSections() {
         header.innerHTML = `
             <h3>${section.name}</h3>
             <button onclick="addTask(${section.id})">+ Add Task</button>
+            <button class="delete-btn" onclick="deleteSection(${section.id})">Delete Section</button>
         `;
         
         const tasksDiv = document.createElement('div');
@@ -98,6 +136,7 @@ function renderSections() {
                 <span>${task.text}</span>
                 <button onclick="editTask(${task.id}, ${section.id})">Edit</button>
                 <button onclick="addSubtask(${task.id}, ${section.id})">+ Subtask</button>
+                <button class="delete-btn" onclick="deleteTask(${task.id}, ${section.id})">Delete</button>
             `;
             
             // Render subtasks
@@ -105,11 +144,12 @@ function renderSections() {
                 const subtasksDiv = document.createElement('div');
                 task.subtasks.forEach(subtask => {
                     const subtaskDiv = document.createElement('div');
-                    subtaskDiv.className = `task subtask ${subtask.completed ? 'completed' : ''}`;
+                    subtaskDiv.className = `subtask ${subtask.completed ? 'completed-subtask' : ''}`;
                     subtaskDiv.innerHTML = `
                         <input type="checkbox" ${subtask.completed ? 'checked' : ''}
                             onchange="toggleSubtask(${subtask.id}, ${task.id}, ${section.id})">
                         <span>${subtask.text}</span>
+                        <button class="delete-btn" onclick="deleteSubtask(${subtask.id}, ${task.id}, ${section.id})">Delete</button>
                     `;
                     subtasksDiv.appendChild(subtaskDiv);
                 });
@@ -124,6 +164,5 @@ function renderSections() {
         container.appendChild(sectionDiv);
     });
 }
-
 // Initial render
 renderSections();
